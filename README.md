@@ -1,7 +1,7 @@
 # Heimdall
 ## _A simple class validator for fields._
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+[![Build Status](https://travis-ci.org/pablosanches/heimdall.svg?branch=master)](https://travis-ci.org/pablosanches/heimdall)
 
 ## Features
 
