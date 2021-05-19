@@ -26,6 +26,9 @@ abstract class Heimdall
             'email' => 'Campo {field} precisa ser um e-mail válido.',
             'phone' => 'Campo {field} precisa ser um telefone válido.',
             'number' => 'Campo {field} precisa ser um número.',
+            'cpf' => 'Campo {field} precisa ser um CPF válido.',
+            'cnpj' => 'Campo {field} precisa ser um CNPJ válido.',
+            'zipcode' => 'Campo {field} precisa ser um CEP válido.',
             'chosen' => 'Campo {field} precisa ser uma das opções {instruction}.'
         ),
         'maxlength' => 'Campo {field} precisa ter no máximo {instruction} caracteres.',
@@ -167,6 +170,24 @@ abstract class Heimdall
                 }
             break;
 
+            case 'cpf':
+                if (!self::isCPF($field)) {
+                    $result[$field]['type']['message'] = self::getMessage($field, 'type', $instruction, $requirements);
+                }
+            break;
+
+            case 'cnpj':
+                if (!self::isCNPJ($field)) {
+                    $result[$field]['type']['message'] = self::getMessage($field, 'type', $instruction, $requirements);
+                }
+            break;
+
+            case 'zipcode':
+                if (!self::isZipCode($field)) {
+                    $result[$field]['type']['message'] = self::getMessage($field, 'type', $instruction, $requirements);
+                }
+            break;
+
             default:
                 if (substr($instruction, 0, 6) == 'chosen') {
                     $instructionChosen = substr($instruction, 0, 6);
@@ -244,6 +265,79 @@ abstract class Heimdall
     private static function isNumber($field)
     {
         return is_numeric(self::$_class->{$field});
+    }
+
+    /**
+     * Check if the value in field its a number
+     */
+    private static function isCPF($field)
+    {
+        $cpf = preg_replace( '/[^0-9]/is', '', self::$_class->{$field});
+
+        if (strlen($cpf) != 11) {
+            return false;
+        }
+
+        if (preg_match('/(\d)\1{10}/', $cpf)) {
+            return false;
+        }
+        
+        for ($t = 9; $t < 11; $t++) {
+            for ($d = 0, $c = 0; $c < $t; $c++) {
+                $d += $cpf[$c] * (($t + 1) - $c);
+            }
+            $d = ((10 * $d) % 11) % 10;
+            if ($cpf[$c] != $d) {
+                return false;
+            }
+        }
+    
+        return true;
+    }
+
+    /**
+     * Check if the value in field its a number
+     */
+    private static function isCNPJ($field)
+    {
+        $cnpj = preg_replace('/[^0-9]/', '', self::$_class->{$field});
+	
+        if (strlen($cnpj) != 14) {
+            return false;
+        }
+
+        if (preg_match('/(\d)\1{13}/', $cnpj)) {
+            return false;
+        }
+
+        for ($i = 0, $j = 5, $soma = 0; $i < 12; $i++) {
+            $soma += $cnpj[$i] * $j;
+            $j = ($j == 2) ? 9 : $j - 1;
+        }
+
+        $resto = $soma % 11;
+
+        if ($cnpj[12] != ($resto < 2 ? 0 : 11 - $resto)) {
+            return false;
+        }
+
+        for ($i = 0, $j = 6, $soma = 0; $i < 13; $i++) {
+            $soma += $cnpj[$i] * $j;
+            $j = ($j == 2) ? 9 : $j - 1;
+        }
+
+        $resto = $soma % 11;
+
+        return ($cnpj[13] == ($resto < 2 ? 0 : 11 - $resto));
+    }
+
+    /**
+     * Check if the value in field its a number
+     */
+    private static function isZipCode($field)
+    {
+        $cep = trim(self::$_class->{$field});
+        return preg_match('/^[0-9]{5,5}([- ]?[0-9]{3,3})?$/', $cep);
     }
 
     /**

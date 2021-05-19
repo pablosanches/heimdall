@@ -173,4 +173,65 @@ class HeimdallTest extends \PHPUnit_Framework_TestCase
         $result = Heimdall::validate($someClass);
         $this->assertTrue($result);
     }
+
+    /**
+     * Test the cpf property
+     * @depends testInitialize
+     */
+    public function testCPF($someClass)
+    {
+        $someClass->cpf = '';
+        $result = Heimdall::validate($someClass);
+        $this->assertTrue($result);
+
+        $someClass->cpf = '00000000000';
+        $result = Heimdall::validate($someClass);
+        $this->assertTrue(array_key_exists('type', $result['cpf']));
+
+        $someClass->cpf = '022.033.056-15'; // Random
+        $result = Heimdall::validate($someClass);
+        $this->assertTrue(array_key_exists('type', $result['cpf']));
+
+        $someClass->cpf = '877.433.990-79'; // Fake
+        $result = Heimdall::validate($someClass);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Test the cnpj property
+     * @depends testInitialize
+     */
+    public function testCNPJ($someClass)
+    {
+        $someClass->cnpj = '';
+        $result = Heimdall::validate($someClass);
+        $this->assertTrue($result);
+
+        $someClass->cnpj = '00000000000000';
+        $result = Heimdall::validate($someClass);
+        $this->assertTrue(array_key_exists('type', $result['cnpj']));
+
+        $someClass->cnpj = '51.085.257/0001-34'; // Random
+        $result = Heimdall::validate($someClass);
+        $this->assertTrue(array_key_exists('type', $result['cnpj']));
+
+        $someClass->cnpj = '51.036.257/0001-34'; // Fake
+        $result = Heimdall::validate($someClass);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Test the zipcode property
+     * @depends testInitialize
+     */
+    public function testCep($someClass)
+    {
+        $someClass->cep = '';
+        $result = Heimdall::validate($someClass);
+        $this->assertTrue($result);
+
+        $someClass->cep = '31585-385'; // Random
+        $result = Heimdall::validate($someClass);
+        $this->assertTrue($result);
+    }
 }

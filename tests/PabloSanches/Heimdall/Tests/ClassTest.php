@@ -39,4 +39,19 @@ class SomeClass
      * @type number
      */
     public $age;
+
+    /**
+     * @type cpf
+     */
+    public $cpf;
+
+    /**
+     * @type cnpj
+     */
+    public $cnpj;
+
+    /**
+     * @type zipcode
+     */
+    public $cep;
 }
