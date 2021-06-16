@@ -58,11 +58,8 @@ abstract class Heimdall
             }
         }
 
-        if (empty($rulesResults)) {
-            return true;
-        } else {
-            return $rulesResults;
-        }
+        
+        return empty($rulesResults) ? true : $rulesResults;
     }
     
     /**
@@ -202,7 +199,7 @@ abstract class Heimdall
     /**
      * Check if the field has been filled.
      */
-    private static function isRequired($field, $instruction = '')
+    private static function isRequired($field)
     {
         return !empty(self::$_class->{$field});
     }
@@ -249,8 +246,9 @@ abstract class Heimdall
      */
     private static function isDate($field)
     {
-        if (!empty(self::$_class->{$field})) {
-            $date = \DateTime::createFromFormat('d/m/Y', self::$_class->{$field});
+        $value = self::$_class->{$field};
+        if (!empty($value)) {
+            $date = \DateTime::createFromFormat('d/m/Y', $value);
             if ($date) {
                 return checkdate($date->format('m'), $date->format('d'), $date->format('Y'));
             }
