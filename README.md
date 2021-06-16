@@ -1,6 +1,7 @@
 # Heimdall
 ## _A simple class validator for fields._
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a2e193903dbe4690bbff4e1b02ae8329)](https://www.codacy.com/gh/pablosanches/heimdall/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pablosanches/heimdall&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/pablosanches/heimdall.svg?branch=master)](https://travis-ci.org/pablosanches/heimdall)
 
 ## Features
